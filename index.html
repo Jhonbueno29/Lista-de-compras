@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Compras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #b4a871;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .container {
+            background-color: rgb(255, 255, 255);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-left: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        li {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        li:last-child {
+            border-bottom: none;
+        }
+        
+        .item-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .comprado {
+            text-decoration: line-through;
+            color: #7f8c8d;
+        }
+        
+        .acoes {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-marcar {
+            background-color: #2ecc71;
+        }
+        
+        .btn-marcar:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-desmarcar {
+            background-color: #f39c12;
+        }
+        
+        .btn-desmarcar:hover {
+            background-color: #e67e22;
+        }
+        
+        .btn-remover {
+            background-color: #e74c3c;
+        }
+        
+        .btn-remover:hover {
+            background-color: #c0392b;
+        }
+        
+        .vazio {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Compras</h1>
+        
+        <form action="/adicionar" method="post">
+            <input type="text" name="item" placeholder="Digite o nome do item" required>
+            <button type="submit">Adicionar</button>
+        </form>
+        
+        <ul>
+            {% if itens %}
+                {% for item in itens %}
+                    <li>
+                        <div class="item-info {% if item.comprado %}comprado{% endif %}">
+                            {{ item.nome }}
+                        </div>
+                        <div class="acoes">
+                            {% if item.comprado %}
+                                <a href="{{ url_for('marcar', id=loop.index0) }}">
+                                    <button class="btn-desmarcar">Desmarcar</button>
+                                </a>
+                            {% else %}
+                                <a href="{{ url_for('marcar', id=loop.index0) }}">
+                                    <button class="btn-marcar">Comprado</button>
+                                </a>
+                            {% endif %}
+                            <a href="{{ url_for('remover', id=loop.index0) }}">
+                                <button class="btn-remover">Remover</button>
+                            </a>
+                        </div>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li class="vazio">Sua lista está vazia. Adicione itens acima!</li>
+            {% endif %}
+        </ul>
+    </div>
+</body>
+</html>
